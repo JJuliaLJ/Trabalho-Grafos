@@ -6,8 +6,9 @@ Descricao
 ## Tecnologias utilizadas
 
 | Nome | Tipo | Descricao |
-| Python | --- | --- |
-| Matplotlib | --- | --- |
+| --- | --- | --- |
+| **Python** | --- | --- |
+| **Matplotlib** | --- | --- |
 
 
 ## Estrutura do projeto
