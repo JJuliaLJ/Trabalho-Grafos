@@ -6,28 +6,19 @@ Descricao
 ## Tecnologias utilizadas
 
 | Nome | Tipo | Descricao |
-| --- | --- | --- |
+| Python | --- | --- |
+| Matplotlib | --- | --- |
 
 
 ## Estrutura do projeto
 
 ```
 
-├── 
-│
-├── 
-│   ├── 
-│   ├── 
-│   ├── 
-│   ├── 
-│   └── 
-├──                      
-│   ├──                
-│
-└──
-    ├── 
-    ├── 
-    ├── 
+├── 2-3-4
+├── kD
+├── Rubro-Negra
+│   ├── arvore.py
+
 
 ```
 
