@@ -134,7 +134,7 @@ class RBTree:
 
         self.fix_delete(node_remove)    
 
-    def fix_remove(self, node):
+    def fix_delete(self, node):
         while node != self.root and node.color == 1:
             if node == node.parent.left:
                 sibling = node.sibling()
@@ -250,8 +250,13 @@ if __name__ == "__main__":
     tree = RBTree()
 
     numbers = random.sample(range(1, 100), 21)
-    for number in numbers:
-        tree.insert(number)
+    for n in numbers:
+        tree.insert(n)
         
     tree.plot_tree()
-    
+
+    for n_del in numbers[1:4]:
+        print(f"Removendo: {n_del}")
+        tree.delete(n_del)
+
+    tree.plot_tree()
