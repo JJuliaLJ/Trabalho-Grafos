@@ -16,9 +16,11 @@ Descricao
 ```
 
 ├── 2-3-4
+│   ├── arvore234.py
 ├── kD
+│   ├── arvoreKD.py
 ├── Rubro-Negra
-│   ├── arvore.py
+│   ├── arvoreRB.py
 
 
 ```
