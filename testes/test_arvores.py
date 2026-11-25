@@ -424,5 +424,66 @@ class TestesMapa(unittest.TestCase):
         self.assertIn("4,2 km", a)
 
 
+class TestesRoteiro(unittest.TestCase):
+    """As demonstrações do roteiro precisam dar o resultado anunciado."""
+
+    def test_demonstracoes_do_roteiro(self):
+        from dados.demo import pacientes_com_endereco
+        from visual.rebalanceamento import resumo_ajustes
+
+        def agenda():
+            arvore = ArvoreRubroNegra()
+            for chave, valor in consultas_demo():
+                arvore.adicionar(chave, valor)
+            arvore.limpar_eventos()
+            return arvore
+
+        def pacientes():
+            arvore = Arvore234()
+            for prontuario, dados in pacientes_com_endereco():
+                arvore.inserir(prontuario, dados)
+            arvore.limpar_eventos()
+            return arvore
+
+        def prontuario(nome):
+            return next(p for p, d in pacientes_com_endereco() if d["nome"] == nome)
+
+        arvore = agenda()
+        arvore.adicionar(202611250700, "consulta")
+        self.assertLessEqual({"rotação", "recoloração"}, set(resumo_ajustes(arvore.eventos)))
+
+        arvore = agenda()
+        self.assertEqual(len(arvore.buscar(202611251100)), 1)
+        arvore.remover(202611251100)
+        self.assertLessEqual({"rotação", "recoloração"}, set(resumo_ajustes(arvore.eventos)))
+
+        arvore = agenda()
+        nos = len(arvore)
+        self.assertIsNotNone(arvore.buscar(202611250900))
+        arvore.adicionar(202611250900, "consulta")
+        self.assertEqual((len(arvore), resumo_ajustes(arvore.eventos)), (nos, {}))
+
+        arvore = pacientes()
+        divisoes = []
+        for _ in range(3):
+            arvore.limpar_eventos()
+            arvore.inserir(arvore.em_ordem()[-1][0] + 1, {})
+            divisoes.append(resumo_ajustes(arvore.eventos).get("divisão de nó", 0))
+        self.assertEqual(divisoes[:2], [0, 0])
+        self.assertGreaterEqual(divisoes[2], 1)
+
+        for nome, ajuste in (("Nelson Gomes", "fusão de nós"), ("Irene Alves", "empréstimo do irmão")):
+            arvore = pacientes()
+            arvore.remover(prontuario(nome))
+            self.assertIn(ajuste, resumo_ajustes(arvore.eventos))
+
+        arvore = ArvoreKD()
+        for nome, x, y in UBS_EXEMPLO:
+            arvore.inserir((x, y), nome)
+        self.assertEqual(arvore.altura(), 7)
+        arvore.construir_balanceada([(n.ponto, n.dados) for n in arvore.todos()])
+        self.assertEqual(arvore.altura(), 5)
+
+
 if __name__ == "__main__":
     unittest.main()
