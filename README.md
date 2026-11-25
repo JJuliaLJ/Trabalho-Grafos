@@ -1,6 +1,6 @@
 # Agenda de UBS com árvores implementadas do zero
 
-Projeto da disciplina sobre árvores binárias, Rubro-Negra, 2-3-4 e k-D.
+Projeto sobre árvores binárias, Rubro-Negra, k-D e 2-3-4 não binária.</br>
 O sistema simula uma Unidade Básica de Saúde: cadastro de pacientes, agenda de consultas
 e localização da UBS mais próxima do paciente. As estruturas são implementadas com nós
 e ponteiros, sem bibliotecas de árvores. Todos os dados são fictícios.
@@ -12,7 +12,7 @@ Requisitos: Git e Python 3.10 ou mais novo. Testado com Python 3.13, Streamlit 1
 1. Baixe o projeto:
 
    ```bash
-   git clone https://github.com/JJuliaLJ/Trabalho-Grafos
+   git clone <url-do-repositorio>
    cd Trabalho-Grafos
    ```
 
@@ -102,25 +102,31 @@ Quando uma operação provoca rebalanceamento, a aba de uso mostra um aviso apon
 ## Estrutura do projeto
 
 ```
-app.py                       interface Streamlit
-arvores/
-  rubro_negra.py             Rubro-Negra
-  arvore_234.py              2-3-4
-  kdtree.py                  k-D (k = 2)
-  bst.py                     árvore binária comum, só para comparação
-  inspecao.py                numeração de nós e esquema em texto
-mapa/
-  cidade.py                  mapa 2D estilizado da cidade (SVG)
-visual/
-  arvore_svg.py              desenho das árvores (SVG)
-  rebalanceamento.py         comparação antes/depois e resumo dos ajustes
-  estilo.py                  tema visual do site
-.streamlit/config.toml       cores do tema
-dados/
-  demo.py                    dados fictícios de demonstração
-testes/
-  test_arvores.py            testes automatizados
+├── .streamlit/                      
+│   └── config.toml     ## cores do tema                                                 
+├── arvores/
+│   ├── arvore_234.py 
+│   ├── bst.py
+│   ├── inspecao.py
+│   ├── kdtree.py
+│   └── rubro_negra.py  
+├── dados/                                                                     
+│   └── demo.py     ## dados fictícios de demonstração                        
+├── mapa/
+│   └── cidade.py     ## mapa 2D estilizado da cidade (SVG)                                        
+├── testes/
+│   └── test_arvores.py     ## testes automatizados                                                
+├── visual/
+│   ├── arvore_svg.py     ## desenho das árvores (SVG)
+│   ├── estilo.py     ## tema visual do site
+│   └── rebalanceamento.py     ## comparação antes/depois e resumo dos ajustes 
+├── .gitignore
+├── app.py     ## interface Streamlit                                              
+├── README.md                                                            
+└── requirements.txt
+
 ```
+
 
 ## Limitações
 
@@ -132,3 +138,6 @@ testes/
 ## Equipe
 
 - Júlia Labad Jatene
+- Pedro Andrade Gonçalves de Souza
+- João Paulo Oliveira Rodrigues
+- Luan Piedade de Oliveira
