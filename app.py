@@ -101,6 +101,15 @@ def carregar_exemplo(tipo):
     limpar_operacoes()
 
 
+def trocar_estrutura():
+    """Troca a árvore da agenda. Clicar na opção já marcada não desmarca."""
+    novo = st.session_state["tipo_agenda"]
+    if novo is None:
+        st.session_state["tipo_agenda"] = st.session_state["agenda_tipo"]
+    else:
+        obter_agenda(novo)
+
+
 def apagar_tudo(tipo):
     st.session_state.update(
         pacientes=Arvore234(), agenda=criar_agenda(tipo), agenda_tipo=tipo, unidades=ArvoreKD()
@@ -269,7 +278,7 @@ def vitrine(tipo):
 def previa_pacientes(pacientes):
     """Uma 2-3-4 pequena, com alguns prontuários reais da lista."""
     arvore = Arvore234()
-    for prontuario, _ in pacientes[:9]:
+    for prontuario, _ in pacientes[:8]:
         arvore.inserir(prontuario, None)
     return estilo.previa_desenho(arvore_svg(arvore.snapshot(), quadro=False))
 
@@ -277,7 +286,15 @@ def previa_pacientes(pacientes):
 def previa_agenda(agenda):
     itens = [(horario_curto(chave)[-5:], item["paciente"], horario_curto(chave)[:5])
              for chave, lista in agenda.em_ordem() for item in lista]
-    return estilo.previa_lista(itens[:5])
+    return estilo.previa_lista(itens[:3])
+
+
+def previa_unidades(pontos):
+    """Uma faixa da cidade, recortada no meio das ruas e sem ícones partidos na borda."""
+    x0, y0, x1, y1 = recorte = (0.0, 5.0, 20.0, 12.5)
+    inteiros = [(nome, (x, y)) for nome, (x, y) in pontos
+                if x0 + 0.5 <= x <= x1 - 0.5 and y0 + 0.5 <= y <= y1 - 0.5]
+    return estilo.previa_mapa(cidade_svg(inteiros, recorte=recorte))
 
 
 def cartao_inicio(chave, titulo, texto, previa, pagina):
@@ -295,7 +312,7 @@ def pagina_inicio(tipo):
     vazio = not (len(pacientes) or len(unidades) or len(st.session_state["agenda"]))
 
     with st.container(key="abertura"):
-        texto, desenho = st.columns([5, 7], gap="large", vertical_alignment="bottom")
+        texto, desenho = st.columns([5, 7], gap="large", vertical_alignment="center")
         with texto.container(key="abertura_texto"):
             st.markdown(estilo.abertura(
                 "A agenda da UBS em árvores balanceadas",
@@ -323,7 +340,7 @@ def pagina_inicio(tipo):
                       previa_pacientes(lista), PACIENTES)
         cartao_inicio("unidades", "Unidades de saúde",
                       f"{len(unidades) or 'As'} unidades em uma árvore k-D, para achar a mais perto do paciente.",
-                      estilo.previa_mapa(cidade_svg(pontos)), UNIDADES)
+                      previa_unidades(pontos), UNIDADES)
     with c2:
         total = sum(len(v) for _, v in st.session_state["agenda"].em_ordem())
         cartao_inicio("agenda", "Agenda",
@@ -516,10 +533,14 @@ def consultas_do_dia(arvore):
 def pagina_agenda(tipo):
     arvore = obter_agenda(tipo)
     obter("a_dia", lambda: DATA_EXEMPLO)
-    st.markdown(estilo.topo(
-        "Agenda", "Consultas em ordem de data e horário. A estrutura pode ser trocada na barra lateral, "
-        "sem perder os dados.", f"Árvore {tipo}",
-    ), unsafe_allow_html=True)
+    cabecalho, escolha = st.columns([3, 2], vertical_alignment="bottom")
+    cabecalho.markdown(estilo.topo("Agenda", "Consultas em ordem de data e horário."), unsafe_allow_html=True)
+    with escolha.container(key="escolha_estrutura"):
+        obter("tipo_agenda", lambda: tipo)
+        st.segmented_control(
+            "Árvore da agenda", ESTRUTURAS, key="tipo_agenda", on_change=trocar_estrutura,
+            help="As duas guardam a mesma agenda. Trocar copia os dados para a outra árvore.",
+        )
     uso, aba_arv, aba_impl = st.tabs(["Consultas", ABA_ARVORE, ABA_IMPLEMENTACAO])
 
     with uso:
@@ -701,10 +722,7 @@ with st.sidebar:
     st.markdown(estilo.marca(), unsafe_allow_html=True)
     pagina = st.radio("Menu", PAGINAS, label_visibility="collapsed", key="menu")
     st.divider()
-    tipo = st.selectbox(
-        "Estrutura da agenda", ESTRUTURAS, key="tipo_agenda",
-        help="As duas guardam a mesma agenda. Trocar copia os dados para a outra estrutura.",
-    )
+    tipo = obter("agenda_tipo", lambda: ESTRUTURAS[0])
     if st.button("Carregar dados de exemplo", key="exemplo", icon=":material/download:", width="stretch",
                  help="Substitui os dados atuais pelos de exemplo."):
         carregar_exemplo(tipo)

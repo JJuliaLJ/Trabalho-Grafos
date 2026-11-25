@@ -183,13 +183,14 @@ def _rota(origem, destino):
     )
 
 
-def cidade_svg(unidades, paciente=None, rotas=(), pacientes=()):
+def cidade_svg(unidades, paciente=None, rotas=(), pacientes=(), recorte=None):
     """Gera o SVG do mapa.
 
     unidades: lista de (nome, (x, y)) das UBS.
     paciente: (x, y) do paciente selecionado, ou None.
     rotas: lista de (distância, nome, (x, y)) das unidades destacadas.
     pacientes: lista de (x, y) de todos os pacientes, para os pontos de fundo.
+    recorte: (x0, y0, x1, y1) em km, para mostrar só uma parte da cidade.
     """
     rnd = random.Random(3)
     distancias = {nome: distancia for distancia, nome, _ in rotas}
@@ -220,8 +221,12 @@ def cidade_svg(unidades, paciente=None, rotas=(), pacientes=()):
         ocupados,
     ))
 
+    quadro = "-0.6 -0.6 21.2 21.2"
+    if recorte is not None:
+        x0, y0, x1, y1 = recorte
+        quadro = f"{x0:g} {_y(y1):g} {x1 - x0:g} {y1 - y0:g}"
     return (
-        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-0.6 -0.6 21.2 21.2" '
+        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{quadro}" '
         'width="100%" style="display:block;max-width:max(420px, calc(100vh - 220px))">'
         + "".join(corpo)
         + "</svg>"

@@ -22,7 +22,7 @@ Cada um precisa saber explicar o código da sua parte.
 | 0:00 a 1:00 | Problema | Página Início: cadastro, agenda e unidade mais próxima. Cada parte usa uma árvore. |
 | 1:00 a 2:30 | Por que balancear | Página Comparação com 300 chaves: binária comum com 300 níveis; Rubro-Negra, 14; 2-3-4, 8. |
 | 2:30 a 5:30 | Rubro-Negra | Agenda. Buscar um horário na aba Árvore. Marcar consultas até aparecer o aviso de rebalanceamento e mostrar o antes e o depois. Cancelar uma. Na aba Implementação, mostrar cores e ponteiros. |
-| 5:30 a 8:00 | 2-3-4 | Pacientes: buscar um prontuário, cadastrar até haver divisão e remover até haver empréstimo ou fusão. Depois trocar a agenda para 2-3-4. |
+| 5:30 a 8:00 | 2-3-4 | Pacientes: buscar um prontuário, cadastrar até haver divisão e remover até haver empréstimo ou fusão. Depois trocar a árvore no topo da Agenda para 2-3-4. |
 | 8:00 a 10:00 | k-D | Unidades de saúde: escolher um paciente e mostrar as mais próximas. Na aba Árvore, usar Reorganizar e comparar a altura. |
 | 10:00 a 11:00 | Repetidos e testes | Regra de cada estrutura e execução dos testes. |
 | 11:00 a 12:00 | Conclusão | O que foi implementado e as limitações. |
