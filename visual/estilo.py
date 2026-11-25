@@ -40,8 +40,8 @@ html, body, [data-testid="stAppViewContainer"], button, input, textarea, select 
 .marca b {display:block; font-size:20px; font-weight:600; letter-spacing:-.02em; color:var(--tinta); line-height:1.2;}
 
 /* Abertura da página inicial */
-.st-key-abertura {background:var(--noite); border-radius:var(--r-lg); padding:48px 0 0 48px; overflow:hidden;}
-.st-key-abertura_texto {padding:8px 0 48px;}
+.st-key-abertura {background:var(--noite); border-radius:var(--r-lg); padding:32px 32px 32px 48px;}
+.st-key-abertura_texto {padding:16px 0;}
 .abertura h1 {font-size:clamp(34px,3.3vw,50px); font-weight:600; letter-spacing:-.035em; line-height:1.06;
   color:#fff; margin:0 0 16px; padding:0; text-wrap:balance;}
 .abertura p {font-size:18px; line-height:1.55; color:#c8d6da; margin:0 0 12px; max-width:44ch;}
@@ -54,12 +54,12 @@ html, body, [data-testid="stAppViewContainer"], button, input, textarea, select 
 .st-key-abertura button:hover {background:rgba(255,255,255,.10); border-color:rgba(255,255,255,.5); color:#fff;}
 .st-key-abertura button[kind="primary"] {background:#fff; border-color:#fff; color:var(--tinta);}
 .st-key-abertura button[kind="primary"]:hover {background:#dcebed; color:var(--tinta);}
-.tela {background:var(--fundo); border-radius:var(--r-md) 0 0 0; padding:20px 20px 8px; height:388px; overflow:hidden;
-  animation:sobe 900ms var(--entrada) 120ms both;}
+.tela {background:var(--fundo); border-radius:var(--r-md); padding:20px 24px; height:392px;
+  display:flex; flex-direction:column; animation:sobe 900ms var(--entrada) 120ms both;}
 .tela .barra {display:flex; justify-content:space-between; gap:16px; font-size:14px; color:var(--suave);
   border-bottom:1px solid var(--linha); padding-bottom:12px; margin-bottom:16px; white-space:nowrap;}
 .tela .barra b {color:var(--tinta); font-weight:600;}
-.tela svg {overflow:visible;}
+.tela svg {flex:1; min-height:0; width:100% !important; height:100% !important; max-width:none !important;}
 .animada .no {opacity:0; animation:aparece 420ms var(--entrada) forwards; animation-delay:calc(450ms + var(--nivel)*190ms);}
 .animada .liga {stroke-dasharray:1; stroke-dashoffset:1; animation:traca 420ms var(--curva) forwards;
   animation-delay:calc(330ms + var(--nivel)*190ms);}
@@ -69,7 +69,7 @@ html, body, [data-testid="stAppViewContainer"], button, input, textarea, select 
 
 /* Cartões da página inicial: cartão, painel com a tela de verdade e o atalho no cartão inteiro */
 [class*="st-key-cartao_"] {position:relative; background:var(--papel); border:1px solid var(--linha);
-  border-radius:var(--r-lg); padding:28px 28px 0; overflow:hidden;
+  border-radius:var(--r-lg); padding:28px 28px 44px;
   transition:transform 150ms var(--curva), box-shadow 150ms var(--curva), border-color 150ms;}
 [class*="st-key-cartao_"]:hover {transform:translateY(-2px); border-color:rgba(31,48,56,.24);
   box-shadow:0 10px 28px rgba(16,38,45,.08);}
@@ -80,14 +80,15 @@ html, body, [data-testid="stAppViewContainer"], button, input, textarea, select 
   color:var(--marca); font-weight:600;}
 [class*="st-key-cartao_"] .stButton button:hover {background:none; color:var(--marca-escura); transform:none;}
 [class*="st-key-cartao_"] .stButton button::after {content:""; position:absolute; inset:0; z-index:2; border-radius:var(--r-lg);}
-.previa {height:196px; overflow:hidden; background:var(--degrau); border-radius:var(--r-md) var(--r-md) 0 0; padding:20px 20px 0;}
-.previa .folha {background:var(--papel); border:1px solid var(--linha); border-bottom:0; border-radius:var(--r-md) var(--r-md) 0 0;
-  padding:14px 16px 0; height:100%; overflow:hidden;}
-.previa .folha svg {max-height:150px;}
-.previa .linha {display:flex; gap:14px; align-items:baseline; padding:9px 0; border-bottom:1px solid var(--linha); font-size:15px; color:var(--tinta);}
+/* A prévia mostra o desenho inteiro: nada é cortado pela borda. */
+.previa {aspect-ratio:8/3; min-height:172px; width:100%; background:var(--fundo); border:1px solid var(--linha);
+  border-radius:var(--r-md); padding:12px 24px; display:flex; flex-direction:column; justify-content:center;}
+.previa svg {width:100% !important; height:100% !important; max-width:none !important; min-height:0;}
+.previa .linha {display:flex; gap:14px; align-items:baseline; padding:10px 0; border-bottom:1px solid var(--linha); font-size:15px; color:var(--tinta);}
+.previa .linha:last-child {border-bottom:0;}
 .previa .linha b {font-weight:600; color:var(--marca); font-variant-numeric:tabular-nums; min-width:46px;}
 .previa .linha span {margin-left:auto; color:var(--suave); font-size:14px;}
-.previa.mapa-previa {padding:0;} .previa.mapa-previa svg {max-width:none !important; width:100%; margin-top:-34%;}
+.previa.mapa-previa {padding:0; overflow:hidden;}
 .barra-h {display:grid; grid-template-columns:104px 1fr 76px; gap:12px; align-items:center; padding:9px 0; font-size:15px; color:var(--tinta);}
 .barra-h i {display:block; height:22px; border-radius:0 4px 4px 0; background:var(--marca);}
 .barra-h i.neutra {background:#b3c1c6;}
@@ -99,6 +100,10 @@ html, body, [data-testid="stAppViewContainer"], button, input, textarea, select 
 .topo .estrutura {display:inline-flex; align-items:center; gap:8px; white-space:nowrap; font-size:15px; font-weight:600;
   color:var(--tinta); border:1px solid var(--linha); background:var(--papel); padding:8px 14px; border-radius:var(--r-sm);}
 .topo .estrutura svg {width:18px; height:18px;}
+
+/* Escolha da estrutura, no topo da Agenda */
+.st-key-escolha_estrutura {align-items:flex-end;}
+.st-key-escolha_estrutura [data-testid="stWidgetLabel"] {justify-content:flex-end;}
 
 /* Painéis e campos */
 [class*="st-key-painel_"] {background:var(--papel); border:1px solid var(--linha) !important; border-radius:var(--r-lg) !important; padding:28px !important;}
@@ -154,7 +159,7 @@ html, body, [data-testid="stAppViewContainer"], button, input, textarea, select 
 
 @media (max-width:900px) {
   .passos {columns:1;} .block-container {padding:16px 16px 48px;}
-  .st-key-abertura {padding:28px 0 0 24px;} .st-key-abertura_texto {padding:0 24px 24px 0;} .tela {height:260px;}
+  .st-key-abertura {padding:24px;} .st-key-abertura_texto {padding:0;} .tela {height:300px; padding:16px;}
   .topo h1 {font-size:30px;}
 }
 @media (prefers-reduced-motion:reduce) {
@@ -188,7 +193,7 @@ def abertura(titulo, texto):
 
 
 def tela(titulo, detalhe, desenho):
-    """Moldura da árvore na abertura, cortada pela borda."""
+    """Moldura da árvore na abertura."""
     return (
         f'<div class="tela"><div class="barra"><b>{escape(titulo)}</b><span>{escape(detalhe)}</span></div>'
         f"{desenho}</div>"
@@ -200,7 +205,7 @@ def resumo(titulo, texto):
 
 
 def previa_desenho(svg):
-    return f'<div class="previa"><div class="folha">{svg}</div></div>'
+    return f'<div class="previa">{svg}</div>'
 
 
 def previa_mapa(svg):
@@ -212,7 +217,7 @@ def previa_lista(itens):
     linhas = "".join(
         f'<div class="linha"><b>{escape(h)}</b>{escape(n)}<span>{escape(d)}</span></div>' for h, n, d in itens
     )
-    return f'<div class="previa"><div class="folha">{linhas}</div></div>'
+    return f'<div class="previa">{linhas}</div>'
 
 
 def previa_barras(itens):
@@ -223,7 +228,7 @@ def previa_barras(itens):
         f'style="width:{100 * v / maior:.1f}%"></i><span>{v} níveis</span></div>'
         for n, v, neutra in itens
     )
-    return f'<div class="previa"><div class="folha">{linhas}</div></div>'
+    return f'<div class="previa">{linhas}</div>'
 
 
 def consulta(hora, nome, info):
