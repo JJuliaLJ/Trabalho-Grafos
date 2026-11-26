@@ -60,7 +60,8 @@ python -m unittest discover -s testes -t . -v
      laranja para os nós ajustados pelo rebalanceamento (rotação, recoloração, divisão, fusão)
      e vermelho para o nó removido. O desenho pode caber na tela ou ficar em tamanho real;
    - **Implementação**: tabela com cada nó, seus ponteiros e a verificação das regras da árvore.
-4. No topo da página Agenda, **Árvore da agenda** troca entre Rubro-Negra e 2-3-4. Os dados são copiados.
+4. No topo da página Agenda, **Árvore da agenda** troca entre Rubro-Negra e 2-3-4. As duas recebem as mesmas operações, na
+   mesma ordem, então trocar só muda qual aparece.
 
 Quando uma operação provoca rebalanceamento, a aba de uso mostra um aviso apontando para a aba Árvore.
 
