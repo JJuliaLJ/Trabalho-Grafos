@@ -368,9 +368,65 @@ class TestesRebalanceamentoVisual(unittest.TestCase):
         t.inserir(40, 40)
         depois = t.snapshot()
         marcar(antes, depois)
-        self.assertEqual(antes["estado"], "removido")
+        # As chaves 10, 20 e 30 continuam na árvore: o nó antigo mudou, não saiu.
+        self.assertEqual(antes["estado"], "alterado")
+        self.assertEqual(antes["celulas_estado"], [None, None, None])
+        folha_nova = [f for f in depois["filhos"] if "40" in f["celulas"]][0]
+        self.assertEqual(folha_nova["celulas_estado"], [None, "novo"])
         self.assertEqual(depois["rotulo"], "20")
         self.assertIn("divisão de nó", resumo_ajustes(t.eventos))
+
+    def test_fusao_na_234_marca_so_a_chave_removida(self):
+        from dados.demo import pacientes_com_endereco
+        from visual.rebalanceamento import marcar
+        from visual.arvore_svg import arvore_svg
+        t = Arvore234()
+        for prontuario, dados in pacientes_com_endereco():
+            t.inserir(prontuario, dados)
+        antes = t.snapshot()
+        t.remover(16329)
+        depois = t.snapshot()
+        marcar(antes, depois)
+
+        def nos(raiz):
+            saida = [raiz]
+            for filho in raiz["filhos"]:
+                saida += nos(filho)
+            return saida
+
+        removidas = [c for n in nos(antes) for c, e in zip(n["celulas"], n["celulas_estado"]) if e == "removido"]
+        self.assertEqual(removidas, ["16329"])
+        self.assertFalse([n for n in nos(antes) if n["estado"] == "removido"])
+        self.assertFalse([n for n in nos(depois) if n["estado"] == "novo"])
+        self.assertIn("SAIU", arvore_svg(antes))
+        self.assertEqual(arvore_svg(antes).count(">SAIU<"), 1)
+
+    def test_kd_reorganizada_nao_marca_unidade_como_removida(self):
+        from visual.rebalanceamento import marcar
+        kd = ArvoreKD()
+        for nome, x, y in UBS_EXEMPLO:
+            kd.inserir((x, y), nome)
+
+        def nos(raiz):
+            saida = [raiz]
+            for filho in raiz["filhos"]:
+                if not filho.get("oculto"):
+                    saida += nos(filho)
+            return saida
+
+        antes = kd.snapshot()
+        kd.construir_balanceada([(n.ponto, n.dados) for n in kd.todos()])
+        depois = kd.snapshot()
+        marcar(antes, depois)
+        self.assertFalse([n for n in nos(antes) + nos(depois) if n["estado"] in ("novo", "removido")])
+
+        antes = kd.snapshot()
+        kd.remover((2.0, 3.0), "UBS Centro")
+        depois = kd.snapshot()
+        marcar(antes, depois)
+        removidos = [n["rotulo"].split("\n")[0] for n in nos(antes) if n["estado"] == "removido"]
+        self.assertEqual(removidos, ["UBS Centro"])
+        self.assertFalse([n for n in nos(depois) if n["estado"] == "novo"])
 
     def test_insercao_sem_ajuste(self):
         from visual.rebalanceamento import resumo_ajustes

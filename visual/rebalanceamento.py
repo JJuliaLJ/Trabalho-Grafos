@@ -18,25 +18,66 @@ TIPOS_DE_AJUSTE = {
 }
 
 
-def _indexar(raiz):
+def _indexar(raiz, por_conteudo=False):
+    """Indexa os nós do retrato.
+
+    por_conteudo=True usa o campo 'chave' quando existe (na k-D, a unidade), em vez da caixa:
+    numa reconstrução ou remoção as unidades mudam de caixa, mas não saem da árvore.
+    """
     nos, pais = {}, {}
+
+    def ident(no):
+        return no.get("chave", no["id"]) if por_conteudo else no["id"]
 
     def visitar(no, pai):
         if no is None or no.get("oculto"):
             return
-        nos[no["id"]] = no
-        pais[no["id"]] = pai
+        nos[ident(no)] = no
+        pais[ident(no)] = pai
         for filho in no["filhos"]:
-            visitar(filho, no["id"])
+            visitar(filho, ident(no))
 
     visitar(raiz, None)
     return nos, pais
 
 
+def _marcar_por_chaves(nos_antes, nos_depois):
+    """2-3-4: compara chaves, não caixas.
+
+    Numa fusão ou divisão as chaves trocam de nó, e as caixas antigas deixam de existir.
+    Comparar caixas marcaria como removidas chaves que continuam na árvore. Aqui:
+      - a chave que saiu de fato fica vermelha, e a que entrou fica verde (estado por célula);
+      - um nó fica laranja só se o seu conjunto de chaves mudou.
+    """
+    def conteudo(no):
+        return tuple(zip(no["celulas"], no["quantidades"]))
+
+    def chaves(nos):
+        return {c for no in nos.values() for c in no["celulas"]}
+
+    def conjuntos(nos):
+        return {conteudo(no) for no in nos.values()}
+
+    chaves_antes, chaves_depois = chaves(nos_antes), chaves(nos_depois)
+    for nos, outras_chaves, outros_nos, marca in ((nos_antes, chaves_depois, conjuntos(nos_depois), "removido"),
+                                                  (nos_depois, chaves_antes, conjuntos(nos_antes), "novo")):
+        for no in nos.values():
+            no["celulas_estado"] = [None if c in outras_chaves else marca for c in no["celulas"]]
+            if all(no["celulas_estado"]):
+                no["estado"] = marca
+            elif conteudo(no) not in outros_nos:
+                no["estado"] = "alterado"
+            else:
+                no["estado"] = None
+
+
 def marcar(antes, depois):
     """Preenche o campo 'estado' dos nós das duas árvores."""
-    nos_antes, pais_antes = _indexar(antes)
-    nos_depois, pais_depois = _indexar(depois)
+    nos_antes, pais_antes = _indexar(antes, por_conteudo=True)
+    nos_depois, pais_depois = _indexar(depois, por_conteudo=True)
+    if any(no.get("celulas") for no in list(nos_antes.values()) + list(nos_depois.values())):
+        _marcar_por_chaves(nos_antes, nos_depois)
+        return
 
     for no in list(nos_antes.values()) + list(nos_depois.values()):
         no["estado"] = None

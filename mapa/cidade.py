@@ -227,7 +227,7 @@ def cidade_svg(unidades, paciente=None, rotas=(), pacientes=(), recorte=None):
         quadro = f"{x0:g} {_y(y1):g} {x1 - x0:g} {y1 - y0:g}"
     return (
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{quadro}" '
-        'width="100%" style="display:block;max-width:max(420px, calc(100vh - 220px))">'
+        'width="100%" style="display:block;max-width:min(560px, calc(100vh - 200px))">'
         + "".join(corpo)
         + "</svg>"
     )
