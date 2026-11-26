@@ -168,7 +168,24 @@ def _no(no):
                     f'<line x1="{esquerda:.1f}" y1="{y:.1f}" x2="{esquerda:.1f}" '
                     f'y2="{y + ALTURA_NO:.1f}" stroke="{borda}" stroke-width="1.2" opacity="{opacidade}"/>'
                 )
-            partes.append(_rotulo(esquerda + largura / 2, cy, celula, texto, opacidade))
+            marca = (no.get("celulas_estado") or [None] * len(no["celulas"]))[i]
+            if marca and estado != marca:
+                # Só esta chave entrou ou saiu: a célula fica pintada e ganha o selo.
+                cor = DESTAQUES[marca]
+                partes.append(
+                    f'<rect x="{esquerda + 2:.1f}" y="{y + 2:.1f}" width="{largura - 4:.1f}" height="{ALTURA_NO - 4}" '
+                    f'rx="5" fill="{cor}" fill-opacity="0.18" stroke="{cor}" stroke-width="2"'
+                    + (' stroke-dasharray="4 3"' if marca == "removido" else "") + "/>"
+                )
+                selo = SELOS[marca]
+                largura_selo = len(selo) * 6.6 + 10
+                partes.append(
+                    f'<rect x="{esquerda + largura / 2 - largura_selo / 2:.1f}" y="{y - 14:.1f}" '
+                    f'width="{largura_selo:.1f}" height="16" rx="4" fill="{cor}"/>'
+                    + _texto(esquerda + largura / 2, y - 6, selo, 9.5, "#ffffff", 700)
+                )
+            partes.append(_rotulo(esquerda + largura / 2, cy, celula, texto,
+                                  "0.55" if marca == "removido" else opacidade))
             if no["quantidades"][i] > 1:
                 partes.append(_contador(esquerda + largura - 6, y + ALTURA_NO, no["quantidades"][i]))
             esquerda += largura

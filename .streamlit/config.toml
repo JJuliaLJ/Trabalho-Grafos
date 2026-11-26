@@ -6,6 +6,7 @@ secondaryBackgroundColor = "#ffffff"
 textColor = "#1f3038"
 borderColor = "#d8dfe2"
 baseRadius = "8px"
+baseFontSize = 14
 showWidgetBorder = true
 font = "'Hanken Grotesk':https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&display=swap, sans-serif"
 

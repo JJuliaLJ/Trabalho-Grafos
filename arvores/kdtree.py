@@ -284,6 +284,7 @@ class ArvoreKD:
                 ]
             return {
                 "id": id(no),
+                "chave": (no.ponto, no.dados),
                 "_ref": no,
                 "rotulo": f"{nome}\n({x:g}, {y:g})",
                 "estilo": f"kd_{eixo}",

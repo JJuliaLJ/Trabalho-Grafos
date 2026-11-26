@@ -20,7 +20,7 @@ CSS = """
 html, body, [data-testid="stAppViewContainer"], button, input, textarea, select {font-family:var(--fonte);}
 #MainMenu, footer {visibility:hidden;}
 [data-testid="stHeader"] {background:transparent;}
-.block-container {padding:32px 40px 64px; max-width:1440px;}
+.block-container {padding:20px 28px 40px; max-width:1440px;}
 *:focus-visible {outline-color:var(--marca);}
 
 /* Barra lateral */
@@ -28,33 +28,33 @@ html, body, [data-testid="stAppViewContainer"], button, input, textarea, select 
 [data-testid="stSidebar"] [data-testid="stElementContainer"]:has([data-testid="stRadio"]),
 [data-testid="stSidebar"] [data-testid="stRadio"], [data-testid="stSidebar"] [role="radiogroup"] {width:100% !important;}
 [data-testid="stSidebar"] [data-testid="stRadio"] label {
-  width:100%; min-height:44px; align-items:center; padding:8px 12px; margin:1px 0; border-radius:var(--r-sm);
+  width:100%; min-height:36px; align-items:center; padding:6px 10px; margin:1px 0; border-radius:var(--r-sm);
   transition:background 150ms var(--curva);}
 [data-testid="stSidebar"] [data-testid="stRadio"] label:hover {background:var(--degrau);}
 [data-testid="stSidebar"] [data-testid="stRadio"] label:has(input:checked) {background:var(--noite);}
 [data-testid="stSidebar"] [data-testid="stRadio"] label:has(input:checked) p {color:#fff; font-weight:600;}
 [data-testid="stSidebar"] [data-testid="stRadio"] label > div:first-child {display:none;}
-[data-testid="stSidebar"] [data-testid="stRadio"] label p {font-size:16px;}
+[data-testid="stSidebar"] [data-testid="stRadio"] label p {font-size:14px;}
 .marca {display:flex; align-items:center; gap:12px; margin:0 0 16px 2px;}
-.marca svg {width:40px; height:40px; flex:none;}
-.marca b {display:block; font-size:20px; font-weight:600; letter-spacing:-.02em; color:var(--tinta); line-height:1.2;}
+.marca svg {width:32px; height:32px; flex:none;}
+.marca b {display:block; font-size:17px; font-weight:600; letter-spacing:-.02em; color:var(--tinta); line-height:1.2;}
 
 /* Abertura da página inicial */
-.st-key-abertura {background:var(--noite); border-radius:var(--r-lg); padding:32px 32px 32px 48px;}
-.st-key-abertura_texto {padding:16px 0;}
-.abertura h1 {font-size:clamp(34px,3.3vw,50px); font-weight:600; letter-spacing:-.035em; line-height:1.06;
+.st-key-abertura {background:var(--noite); border-radius:var(--r-lg); padding:22px 22px 22px 32px;}
+.st-key-abertura_texto {padding:8px 0;}
+.abertura h1 {font-size:clamp(26px,2.4vw,36px); font-weight:600; letter-spacing:-.035em; line-height:1.06;
   color:#fff; margin:0 0 16px; padding:0; text-wrap:balance;}
-.abertura p {font-size:18px; line-height:1.55; color:#c8d6da; margin:0 0 12px; max-width:44ch;}
+.abertura p {font-size:15px; line-height:1.55; color:#c8d6da; margin:0 0 12px; max-width:44ch;}
 .abertura h1, .abertura p, .st-key-abertura .stButton {animation:sobe 700ms var(--entrada) both;}
 .abertura p {animation-delay:90ms;}
 .st-key-abertura .stButton {animation-delay:180ms;}
-.st-key-abertura button {min-height:48px; padding:0 20px; border:1px solid rgba(255,255,255,.28);
+.st-key-abertura button {min-height:38px; padding:0 16px; border:1px solid rgba(255,255,255,.28);
   background:transparent; color:#fff;}
-.st-key-abertura button p {font-size:16px;}
+.st-key-abertura button p {font-size:14px;}
 .st-key-abertura button:hover {background:rgba(255,255,255,.10); border-color:rgba(255,255,255,.5); color:#fff;}
 .st-key-abertura button[kind="primary"] {background:#fff; border-color:#fff; color:var(--tinta);}
 .st-key-abertura button[kind="primary"]:hover {background:#dcebed; color:var(--tinta);}
-.tela {background:var(--fundo); border-radius:var(--r-md); padding:20px 24px; height:392px;
+.tela {background:var(--fundo); border-radius:var(--r-md); padding:14px 18px; height:290px;
   display:flex; flex-direction:column; animation:sobe 900ms var(--entrada) 120ms both;}
 .tela .barra {display:flex; justify-content:space-between; gap:16px; font-size:14px; color:var(--suave);
   border-bottom:1px solid var(--linha); padding-bottom:12px; margin-bottom:16px; white-space:nowrap;}
@@ -69,22 +69,22 @@ html, body, [data-testid="stAppViewContainer"], button, input, textarea, select 
 
 /* Cartões da página inicial: cartão, painel com a tela de verdade e o atalho no cartão inteiro */
 [class*="st-key-cartao_"] {position:relative; background:var(--papel); border:1px solid var(--linha);
-  border-radius:var(--r-lg); padding:28px 28px 44px;
+  border-radius:var(--r-lg); padding:18px 20px 32px;
   transition:transform 150ms var(--curva), box-shadow 150ms var(--curva), border-color 150ms;}
 [class*="st-key-cartao_"]:hover {transform:translateY(-2px); border-color:rgba(31,48,56,.24);
   box-shadow:0 10px 28px rgba(16,38,45,.08);}
-.resumo h3 {font-size:22px; font-weight:600; letter-spacing:-.02em; color:var(--tinta); margin:0 0 8px; padding:0;}
-.resumo p {font-size:16px; line-height:1.5; color:var(--tinta); margin:0; min-height:48px; max-width:46ch;}
+.resumo h3 {font-size:18px; font-weight:600; letter-spacing:-.02em; color:var(--tinta); margin:0 0 8px; padding:0;}
+.resumo p {font-size:14px; line-height:1.45; color:var(--tinta); margin:0; min-height:40px; max-width:46ch;}
 [class*="st-key-cartao_"] [data-testid="stElementContainer"], [class*="st-key-cartao_"] .stButton {position:static !important;}
 [class*="st-key-cartao_"] .stButton button {position:static; border:0; background:none; padding:0; min-height:32px;
   color:var(--marca); font-weight:600;}
 [class*="st-key-cartao_"] .stButton button:hover {background:none; color:var(--marca-escura); transform:none;}
 [class*="st-key-cartao_"] .stButton button::after {content:""; position:absolute; inset:0; z-index:2; border-radius:var(--r-lg);}
 /* A prévia mostra o desenho inteiro: nada é cortado pela borda. */
-.previa {aspect-ratio:8/3; min-height:172px; width:100%; background:var(--fundo); border:1px solid var(--linha);
+.previa {aspect-ratio:3/1; min-height:130px; width:100%; background:var(--fundo); border:1px solid var(--linha);
   border-radius:var(--r-md); padding:12px 24px; display:flex; flex-direction:column; justify-content:center;}
 .previa svg {width:100% !important; height:100% !important; max-width:none !important; min-height:0;}
-.previa .linha {display:flex; gap:14px; align-items:baseline; padding:10px 0; border-bottom:1px solid var(--linha); font-size:15px; color:var(--tinta);}
+.previa .linha {display:flex; gap:12px; align-items:baseline; padding:6px 0; border-bottom:1px solid var(--linha); font-size:15px; color:var(--tinta);}
 .previa .linha:last-child {border-bottom:0;}
 .previa .linha b {font-weight:600; color:var(--marca); font-variant-numeric:tabular-nums; min-width:46px;}
 .previa .linha span {margin-left:auto; color:var(--suave); font-size:14px;}
@@ -94,11 +94,11 @@ html, body, [data-testid="stAppViewContainer"], button, input, textarea, select 
 .barra-h i.neutra {background:#b3c1c6;}
 
 /* Cabeçalho das páginas */
-.topo {display:flex; align-items:flex-end; justify-content:space-between; gap:24px; flex-wrap:wrap; padding-bottom:8px;}
-.topo h1 {font-size:38px; font-weight:600; letter-spacing:-.03em; color:var(--tinta); margin:0; padding:0; line-height:1.1;}
-.topo p {margin:8px 0 0; font-size:17px; line-height:1.5; color:var(--suave); max-width:62ch;}
-.topo .estrutura {display:inline-flex; align-items:center; gap:8px; white-space:nowrap; font-size:15px; font-weight:600;
-  color:var(--tinta); border:1px solid var(--linha); background:var(--papel); padding:8px 14px; border-radius:var(--r-sm);}
+.topo {display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; padding-bottom:4px;}
+.topo h1 {font-size:28px; font-weight:600; letter-spacing:-.03em; color:var(--tinta); margin:0; padding:0; line-height:1.1;}
+.topo p {margin:4px 0 0; font-size:14px; line-height:1.5; color:var(--suave); max-width:62ch;}
+.topo .estrutura {display:inline-flex; align-items:center; gap:8px; white-space:nowrap; font-size:13px; font-weight:600;
+  color:var(--tinta); border:1px solid var(--linha); background:var(--papel); padding:5px 10px; border-radius:var(--r-sm);}
 .topo .estrutura svg {width:18px; height:18px;}
 
 /* Escolha da estrutura, no topo da Agenda */
@@ -106,55 +106,55 @@ html, body, [data-testid="stAppViewContainer"], button, input, textarea, select 
 .st-key-escolha_estrutura [data-testid="stWidgetLabel"] {justify-content:flex-end;}
 
 /* Painéis e campos */
-[class*="st-key-painel_"] {background:var(--papel); border:1px solid var(--linha) !important; border-radius:var(--r-lg) !important; padding:28px !important;}
-[data-testid="stHeading"] h3 {font-size:22px; font-weight:600; letter-spacing:-.02em; padding-top:0;}
-[data-testid="stWidgetLabel"] p {font-size:15px; font-weight:500; color:var(--tinta);}
-[data-baseweb="input"], [data-baseweb="select"] > div, [data-testid="stNumberInputContainer"] {min-height:46px;}
-[data-baseweb="input"] input, [data-baseweb="select"] {font-size:16px;}
+[class*="st-key-painel_"] {background:var(--papel); border:1px solid var(--linha) !important; border-radius:var(--r-lg) !important; padding:16px 18px !important;}
+[data-testid="stHeading"] h3 {font-size:17px; font-weight:600; letter-spacing:-.02em; padding-top:0;}
+[data-testid="stWidgetLabel"] p {font-size:13px; font-weight:500; color:var(--tinta);}
+[data-baseweb="input"], [data-baseweb="select"] > div, [data-testid="stNumberInputContainer"] {min-height:36px;}
+[data-baseweb="input"] input, [data-baseweb="select"] {font-size:14px;}
 .stTabs [data-baseweb="tab-list"] {gap:4px;}
-.stTabs [data-baseweb="tab"] {padding:12px 16px;}
-.stTabs [data-baseweb="tab"] p {font-size:16px; font-weight:600;}
-.stButton > button, [data-testid="stPopover"] button {border-radius:var(--r-sm); min-height:46px; font-weight:600;
+.stTabs [data-baseweb="tab"] {padding:8px 12px;}
+.stTabs [data-baseweb="tab"] p {font-size:14px; font-weight:600;}
+.stButton > button, [data-testid="stPopover"] button {border-radius:var(--r-sm); min-height:36px; font-weight:600;
   transition:transform 150ms var(--curva), background 150ms, border-color 150ms;}
-.stButton > button p {font-size:16px;}
+.stButton > button p {font-size:14px;}
 .stButton > button:hover:not(:disabled) {transform:translateY(-1px);}
 .stButton > button:active:not(:disabled) {transform:translateY(1px) scale(.985); transition-duration:90ms;}
 [data-testid="stExpander"] details {border-radius:var(--r-lg); background:var(--papel); border-color:var(--linha);}
-[data-testid="stCaptionContainer"] p {font-size:15px; color:var(--suave);}
+[data-testid="stCaptionContainer"] p {font-size:13px; color:var(--suave);}
 
 /* Lista de consultas */
-.consulta {display:flex; align-items:center; gap:16px; min-height:48px;}
-.consulta .hora {font-weight:600; font-size:18px; color:var(--marca); min-width:58px; font-variant-numeric:tabular-nums;}
-.consulta .nome {font-weight:600; font-size:16px; color:var(--tinta); line-height:1.3;}
-.consulta .info {font-size:14px; color:var(--suave);}
+.consulta {display:flex; align-items:center; gap:12px; min-height:36px;}
+.consulta .hora {font-weight:600; font-size:15px; color:var(--marca); min-width:58px; font-variant-numeric:tabular-nums;}
+.consulta .nome {font-weight:600; font-size:14px; color:var(--tinta); line-height:1.3;}
+.consulta .info {font-size:12px; color:var(--suave);}
 
 /* Resultado das unidades */
-.unidade {display:flex; align-items:center; gap:14px; border-top:1px solid var(--linha); padding:13px 0; font-size:16px;}
-.unidade .pos {width:30px; height:30px; border-radius:var(--r-sm); display:grid; place-items:center; flex:none;
+.unidade {display:flex; align-items:center; gap:10px; border-top:1px solid var(--linha); padding:8px 0; font-size:14px;}
+.unidade .pos {width:24px; height:24px; border-radius:var(--r-sm); display:grid; place-items:center; flex:none;
   background:var(--degrau); color:var(--suave); font-weight:600;}
 .unidade.melhor .pos {background:var(--marca); color:#fff;}
 .unidade .nome {font-weight:600; color:var(--tinta);}
 .unidade .dist {margin-left:auto; font-weight:600; color:var(--tinta); font-variant-numeric:tabular-nums;}
 
 /* Árvore */
-.arvore-quadro {background:var(--papel); border:1px solid var(--linha); border-radius:var(--r-lg); padding:16px; overflow-x:auto;}
+.arvore-quadro {background:var(--papel); border:1px solid var(--linha); border-radius:var(--r-lg); padding:10px; overflow-x:auto;}
 .arvore-vazia {background:var(--papel); border:1px dashed #aebbc0; border-radius:var(--r-lg);
   padding:40px; text-align:center; color:var(--suave); font-size:16px;}
 .legenda {display:flex; gap:8px 20px; flex-wrap:wrap; margin:4px 0 8px;}
-.chip {display:inline-flex; align-items:center; gap:8px; font-size:15px; color:var(--tinta);}
-.chip i {display:inline-block; width:16px; height:16px; border-radius:4px;}
-.rotulo-fase {font-weight:600; font-size:20px; letter-spacing:-.02em; color:var(--tinta); margin:16px 0 8px;}
-.operacao {border-radius:var(--r-md); padding:16px 20px; margin:4px 0 8px; border:1px solid var(--linha); background:var(--papel);}
+.chip {display:inline-flex; align-items:center; gap:6px; font-size:13px; color:var(--tinta);}
+.chip i {display:inline-block; width:13px; height:13px; border-radius:4px;}
+.rotulo-fase {font-weight:600; font-size:16px; letter-spacing:-.02em; color:var(--tinta); margin:10px 0 6px;}
+.operacao {border-radius:var(--r-md); padding:10px 14px; margin:4px 0 6px; border:1px solid var(--linha); background:var(--papel);}
 .operacao.ajuste {background:var(--alerta); border-color:var(--alerta-linha);}
-.operacao b {font-size:18px; font-weight:600; letter-spacing:-.01em; color:var(--tinta);}
-.operacao .sub {font-size:15px; color:var(--suave); margin-top:4px;}
+.operacao b {font-size:15px; font-weight:600; letter-spacing:-.01em; color:var(--tinta);}
+.operacao .sub {font-size:13px; color:var(--suave); margin-top:2px;}
 .passos {padding:0 0 0 24px; margin:0 0 8px; columns:2; column-gap:48px;}
 .passos.curto {columns:1;}
-.passos li {padding:4px 0 4px 4px; font-size:16px; color:var(--tinta); break-inside:avoid;}
+.passos li {padding:2px 0 2px 4px; font-size:14px; color:var(--tinta); break-inside:avoid;}
 .passos li::marker {color:var(--suave); font-weight:600;}
 .passos li.ajuste {font-weight:600; color:#7d4a00;}
 .aviso-arvore {background:var(--marca-clara); color:var(--tinta); border-radius:var(--r-md);
-  padding:14px 18px; font-size:16px; margin:8px 0;}
+  padding:10px 14px; font-size:14px; margin:6px 0;}
 .mapa svg {border-radius:var(--r-lg); border:1px solid var(--linha);}
 
 @media (max-width:900px) {
