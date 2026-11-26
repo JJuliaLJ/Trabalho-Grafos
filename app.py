@@ -63,20 +63,32 @@ def criar_agenda(tipo):
 
 
 def obter_agenda(tipo):
-    """Agenda no tipo escolhido. Ao trocar o tipo, copia os dados para a nova estrutura."""
-    if "agenda" not in st.session_state:
-        st.session_state["agenda"] = criar_agenda(tipo)
-        st.session_state["agenda_tipo"] = tipo
-    elif st.session_state["agenda_tipo"] != tipo:
-        destino = criar_agenda(tipo)
-        for chave, consultas in st.session_state["agenda"].em_ordem():
-            for item in consultas:
-                destino.adicionar(chave, item)
-        destino.limpar_eventos()
-        st.session_state["agenda"] = destino
-        st.session_state["agenda_tipo"] = tipo
+    """Agenda no tipo escolhido.
+
+    As duas árvores ficam sempre prontas e recebem as mesmas operações, na mesma ordem.
+    Trocar só muda qual aparece: copiar os dados na troca reinseriria tudo em ordem de
+    horário, o pior caso, e a Rubro-Negra ficaria torta para a direita.
+    """
+    if "agendas" not in st.session_state:
+        st.session_state["agendas"] = {t: criar_agenda(t) for t in ESTRUTURAS}
+    agendas = st.session_state["agendas"]
+    if st.session_state.get("agenda_tipo") != tipo:
         st.session_state.pop("op_agenda", None)
-    return st.session_state["agenda"]
+    st.session_state["agenda_tipo"] = tipo
+    st.session_state["agenda"] = agendas[tipo]
+    return agendas[tipo]
+
+
+def mudar_agenda(descricao, mudanca):
+    """Aplica a mudança na árvore que aparece (com antes e depois) e na outra, em silêncio."""
+    tipo = st.session_state["agenda_tipo"]
+    ajustes = operar("agenda", obter_agenda(tipo), descricao,
+                     lambda: mudanca(obter_agenda(tipo)), horario_no)
+    for outro, arvore in st.session_state["agendas"].items():
+        if outro != tipo:
+            mudanca(arvore)
+            arvore.limpar_eventos()
+    return ajustes
 
 
 def limpar_operacoes():
@@ -89,15 +101,17 @@ def carregar_exemplo(tipo):
     pacientes = Arvore234()
     for prontuario, dados in pacientes_com_endereco():
         pacientes.inserir(prontuario, dados)
-    agenda = criar_agenda(tipo)
+    agendas = {t: criar_agenda(t) for t in ESTRUTURAS}
     for chave, item in consultas_demo():
-        agenda.adicionar(chave, item)
+        for agenda in agendas.values():
+            agenda.adicionar(chave, item)
     unidades = ArvoreKD()
     for nome, x, y in UBS_EXEMPLO:
         unidades.inserir((x, y), nome)
-    for arvore in (pacientes, agenda, unidades):
+    for arvore in (pacientes, unidades, *agendas.values()):
         arvore.limpar_eventos()
-    st.session_state.update(pacientes=pacientes, agenda=agenda, agenda_tipo=tipo, unidades=unidades)
+    st.session_state.update(pacientes=pacientes, agendas=agendas, unidades=unidades)
+    obter_agenda(tipo)
     limpar_operacoes()
 
 
@@ -112,8 +126,9 @@ def trocar_estrutura():
 
 def apagar_tudo(tipo):
     st.session_state.update(
-        pacientes=Arvore234(), agenda=criar_agenda(tipo), agenda_tipo=tipo, unidades=ArvoreKD()
+        pacientes=Arvore234(), agendas={t: criar_agenda(t) for t in ESTRUTURAS}, unidades=ArvoreKD()
     )
+    obter_agenda(tipo)
     limpar_operacoes()
 
 
@@ -397,9 +412,9 @@ def remover_paciente(arvore, agenda, prontuario, nome, consultas):
     ajustes = operar("pacientes", arvore, f"Remoção de {nome} (prontuário {prontuario})",
                      lambda: arvore.remover(prontuario))
     if consultas:
-        operar(
-            "agenda", agenda, f"Cancelamento de {len(consultas)} consulta(s) de {nome}",
-            lambda: [agenda.remover_valor(chave, item) for chave, item in consultas], horario_no,
+        mudar_agenda(
+            f"Cancelamento de {len(consultas)} consulta(s) de {nome}",
+            lambda a: [a.remover_valor(chave, item) for chave, item in consultas],
         )
     extra = f" {len(consultas)} consulta(s) também cancelada(s)." if consultas else ""
     concluir(f"{nome} removido.{extra}", ajustes)
@@ -494,10 +509,9 @@ def marcar_consulta(arvore, pacientes):
         if any(item["prontuario"] == prontuario for item in existentes):
             st.error(f"{nomes[prontuario]} já tem consulta em {horario_curto(chave)}.")
             return
-        ajustes = operar(
-            "agenda", arvore, f"Consulta de {nomes[prontuario]} em {horario_curto(chave)}",
-            lambda: arvore.adicionar(chave, {"prontuario": prontuario, "paciente": nomes[prontuario]}),
-            horario_no,
+        ajustes = mudar_agenda(
+            f"Consulta de {nomes[prontuario]} em {horario_curto(chave)}",
+            lambda a: a.adicionar(chave, {"prontuario": prontuario, "paciente": nomes[prontuario]}),
         )
         extra = " O horário já existia: ela entrou na lista do mesmo nó." if existentes else ""
         st.session_state["a_dia"] = data
@@ -523,9 +537,9 @@ def consultas_do_dia(arvore):
         c1.markdown(estilo.consulta(horario_curto(chave)[-5:], item["paciente"],
                                     f"Prontuário {item['prontuario']}"), unsafe_allow_html=True)
         if c2.button("Cancelar", key=f"a_cancelar_{chave}_{item['prontuario']}", width="stretch"):
-            ajustes = operar(
-                "agenda", arvore, f"Cancelamento de {item['paciente']} em {horario_curto(chave)}",
-                lambda: arvore.remover_valor(chave, item), horario_no,
+            ajustes = mudar_agenda(
+                f"Cancelamento de {item['paciente']} em {horario_curto(chave)}",
+                lambda a: a.remover_valor(chave, item),
             )
             concluir(f"Consulta de {item['paciente']} cancelada.", ajustes)
 
@@ -539,7 +553,7 @@ def pagina_agenda(tipo):
         obter("tipo_agenda", lambda: tipo)
         st.segmented_control(
             "Árvore da agenda", ESTRUTURAS, key="tipo_agenda", on_change=trocar_estrutura,
-            help="As duas guardam a mesma agenda. Trocar copia os dados para a outra árvore.",
+            help="As duas árvores guardam a mesma agenda e recebem as mesmas operações. Trocar só muda qual aparece.",
         )
     uso, aba_arv, aba_impl = st.tabs(["Consultas", ABA_ARVORE, ABA_IMPLEMENTACAO])
 
